@@ -1,1 +1,1 @@
-worker: python3 homework.py
+bot: python3 homework.py
