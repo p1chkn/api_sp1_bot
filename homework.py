@@ -48,16 +48,17 @@ def get_last_update():
     return last_update
 
 
-def send_message(message):
-    proxy = telegram.utils.request.Request(
-        proxy_url='socks5://104.248.63.15:30588')
-    bot = telegram.Bot(token=TELEGRAM_TOKEN, request=proxy)
+def send_message(message, chat_id = CHAT_ID):
+    #proxy = telegram.utils.request.Request(
+    #    proxy_url='socks5://104.248.63.15:30588')
+    bot = telegram.Bot(token=TELEGRAM_TOKEN)
     return bot.send_message(chat_id=CHAT_ID, text=message)
 
 
 def main():
     current_timestamp = int(time.time())
     update = get_last_update()
+    send_message('Hi!')
     while True:
         try:
             new_homework = get_homework_statuses(current_timestamp)
@@ -68,10 +69,11 @@ def main():
             if update != get_last_update():
                 update = get_last_update()
                 name = update['message']['from']['first_name']
-                if update['message']['from']['id'] == 214179795:
+                chat_id = update['message']['from']['id']
+                if chat_id == 214179795:
                     send_message('Привет, хозяин!')
                 else:
-                    send_message(f'Привет, {name}! Я бот-ассистент Павла!')
+                    send_message(f'Привет, {name}! Я бот-ассистент Павла!',chat_id=chat_id)
             time.sleep(3)
 
         except Exception as e:
