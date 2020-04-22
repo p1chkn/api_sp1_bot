@@ -1,3 +1,6 @@
+'''
+Бот крутиться на серверах Heroku, @pl_chkn_bot его имя в телеграме
+'''
 import os
 import requests
 import telegram
@@ -48,9 +51,7 @@ def get_last_update():
     return last_update
 
 
-def send_message(message, chat_id=CHAT_ID):
-    #proxy = telegram.utils.request.Request(
-    #    proxy_url='socks5://104.248.63.15:30588')
+def send_message(message):
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     return bot.send_message(chat_id=CHAT_ID, text=message)
 
@@ -59,9 +60,12 @@ def main():
     current_timestamp = int(time.time())
     update = get_last_update()
     send_message('Hi!')
+    bot = telegram.Bot(token=TELEGRAM_TOKEN)
     while True:
         try:
-            new_homework = get_homework_statuses(current_timestamp)
+            if (int(time.time())-current_timestamp) > 900:
+                new_homework = get_homework_statuses(current_timestamp)
+                current_timestamp = new_homework.get('current_date')
             if new_homework.get('homeworks'):
                 for item in new_homework.get('homeworks'):
                     send_message(parse_homework_status(item))
@@ -70,10 +74,11 @@ def main():
                 update = get_last_update()
                 name = update['message']['from']['first_name']
                 chat_id = update['message']['from']['id']
-                if chat_id == 214179795:
+                if chat_id == CHAT_ID:
                     send_message('Привет, хозяин!')
                 else:
-                    send_message(f'Привет, {name}! Я бот-ассистент Павла!', chat_id=chat_id)
+                    message = f'Привет, {name}! Я бот-ассистент Павла!'
+                    bot.send_message(chat_id=chat_id, text=message)
             time.sleep(3)
 
         except Exception as e:
