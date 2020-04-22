@@ -65,6 +65,7 @@ def send_message(message):
 
 def main():
     current_timestamp = int(time.time())
+    new_homework = get_homework_statuses(current_timestamp)
     update = get_last_update()
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     while True:
