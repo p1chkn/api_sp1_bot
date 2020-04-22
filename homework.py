@@ -1,5 +1,7 @@
-#Бот крутиться на серверах Heroku, @pl_chkn_bot его имя в телеграме
-#функцию ответа тут присутствует просто, чтобы понимать, что он хотя бы работает
+'''
+Бот крутиться на серверах Heroku, @pl_chkn_bot его имя в телеграме
+функцию ответа тут присутствует просто, чтобы понимать, что он хотя бы работает
+'''
 
 import os
 import requests
@@ -56,15 +58,16 @@ def send_message(message):
     return bot.send_message(chat_id=CHAT_ID, text=message)
 
 
-#К сожалению, из-за тестов нельзя ввести еще один параметр в функцию отправки сообщений :(
-#поэтому сообщения не себе приходится довольно некрасиво отправлять
+'''
+К сожалению, из-за тестов нельзя ввести еще один параметр в функцию отправки сообщений :(
+поэтому отправляю сообщения только себе
+'''
 
 
 def main():
     current_timestamp = int(time.time())
     new_homework = get_homework_statuses(current_timestamp)
     update = get_last_update()
-    bot = telegram.Bot(token=TELEGRAM_TOKEN)
     while True:
         try:
             if (int(time.time())-current_timestamp) > 900:
@@ -81,9 +84,7 @@ def main():
                 if int(chat_id) == int(CHAT_ID):
                     send_message('Привет, хозяин!')
                 else:
-                    message = f'Привет, {name}! Я бот-ассистент Павла!'
-                    send_message(f'Мне написал {name}')
-                    bot.send_message(chat_id=chat_id, text=message)
+                    send_message(f'Мне написал {name}!')
             time.sleep(3)
 
         except Exception as e:
