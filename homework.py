@@ -40,8 +40,23 @@ def send_message(message):
     return bot.send_message(chat_id=CHAT_ID, text=message)
 
 
+def get_updates():
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getUpdates"
+    params = {'timeout': 30, 'offset': None}
+    return requests.get(url=url, params=params).json()['result']   
+    
+
+
+def send_message(message):
+    proxy = telegram.utils.request.Request(
+        proxy_url='socks5://104.248.63.15:30588')
+    bot = telegram.Bot(token=TELEGRAM_TOKEN, request=proxy)
+    return bot.send_message(chat_id=CHAT_ID, text=message)
+
+
 def main():
     current_timestamp = int(time.time())
+    update = get_last_update()
     while True:
         try:
             new_homework = get_homework_statuses(current_timestamp)
@@ -49,7 +64,10 @@ def main():
                 for item in new_homework.get('homeworks'):
                     send_message(parse_homework_status(item))
                 current_timestamp = new_homework.get('current_date')
-            time.sleep(300)
+            if update != get_last_update():
+                update = get_last_update()
+                send_message('что-то случилось!')
+            time.sleep(3)
 
         except Exception as e:
             print(f'Бот упал с ошибкой: {e}')
