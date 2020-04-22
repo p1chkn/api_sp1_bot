@@ -48,7 +48,7 @@ def get_last_update():
     return last_update
 
 
-def send_message(message, chat_id = CHAT_ID):
+def send_message(message, chat_id=CHAT_ID):
     #proxy = telegram.utils.request.Request(
     #    proxy_url='socks5://104.248.63.15:30588')
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
@@ -73,7 +73,7 @@ def main():
                 if chat_id == 214179795:
                     send_message('Привет, хозяин!')
                 else:
-                    send_message(f'Привет, {name}! Я бот-ассистент Павла!',chat_id=chat_id)
+                    send_message(f'Привет, {name}! Я бот-ассистент Павла!', chat_id=chat_id)
             time.sleep(3)
 
         except Exception as e:
