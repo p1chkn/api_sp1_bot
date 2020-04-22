@@ -33,18 +33,19 @@ def get_homework_statuses(current_timestamp):
     return homework_statuses.json()
 
 
-def send_message(message):
-    proxy = telegram.utils.request.Request(
-        proxy_url='socks5://104.248.63.15:30588')
-    bot = telegram.Bot(token=TELEGRAM_TOKEN, request=proxy)
-    return bot.send_message(chat_id=CHAT_ID, text=message)
-
-
 def get_updates():
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getUpdates"
     params = {'timeout': 30, 'offset': None}
-    return requests.get(url=url, params=params).json()['result']   
-    
+    return requests.get(url=url, params=params).json()['result']
+
+
+def get_last_update():
+    get_result = get_updates()
+    if len(get_result) > 0:
+        last_update = get_result[-1]
+    else:
+        last_update = get_result[len(get_result)]
+    return last_update
 
 
 def send_message(message):
@@ -66,7 +67,11 @@ def main():
                 current_timestamp = new_homework.get('current_date')
             if update != get_last_update():
                 update = get_last_update()
-                send_message('что-то случилось!')
+                name = update['message']['from']['first_name']
+                if update['message']['from']['id'] == 214179795:
+                    send_message('Привет, хозяин!')
+                else:
+                    send_message(f'Привет, {name}! Я бот-ассистент Павла!')
             time.sleep(3)
 
         except Exception as e:
