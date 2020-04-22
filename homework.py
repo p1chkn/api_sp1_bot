@@ -82,6 +82,7 @@ def main():
                     send_message('Привет, хозяин!')
                 else:
                     message = f'Привет, {name}! Я бот-ассистент Павла!'
+                    send_message(f'Мне написал {name}')
                     bot.send_message(chat_id=chat_id, text=message)
             time.sleep(3)
 
