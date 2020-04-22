@@ -59,7 +59,7 @@ def send_message(message):
 def main():
     current_timestamp = int(time.time())
     update = get_last_update()
-    send_message('Hi!')
+    send_message('Hi! start working!')
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     while True:
         try:
