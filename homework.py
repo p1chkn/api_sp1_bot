@@ -66,6 +66,7 @@ def send_message(message):
 
 def main():
     current_timestamp = int(time.time())
+    bot = telegram.Bot(token=TELEGRAM_TOKEN)
     new_homework = get_homework_statuses(current_timestamp)
     update = get_last_update()
     while True:
@@ -81,10 +82,13 @@ def main():
                 update = get_last_update()
                 name = update['message']['from']['first_name']
                 chat_id = update['message']['from']['id']
+                msg_text = update['message']['text']
                 if int(chat_id) == int(CHAT_ID):
                     send_message('Привет, хозяин!')
                 else:
-                    send_message(f'Мне написал {name}!')
+                    message = f'Привет, {name}! Я бот-ассистен Павла!'
+                    bot.send_message(chat_id=chat_id, text=message)
+                    send_message(f'Мне написал {name}! {msg_text}')
             time.sleep(3)
 
         except Exception as e:
