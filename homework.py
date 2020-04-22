@@ -56,6 +56,12 @@ def send_message(message):
     return bot.send_message(chat_id=CHAT_ID, text=message)
 
 
+'''
+К сожалению, из-за тестов нельзя ввести еще один параметр в функцию отправки сообщений :(
+поэтому сообщения не себе приходится довольно некрасиво отправлять
+'''
+
+
 def main():
     current_timestamp = int(time.time())
     update = get_last_update()
