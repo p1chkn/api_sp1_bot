@@ -1,1 +1,1 @@
-bot: python3 homework.py
+web: python3 homework.py
