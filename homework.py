@@ -49,7 +49,7 @@ def get_last_update():
     if len(get_result) > 0:
         last_update = get_result[-1]
     else:
-        last_update = get_result[len(get_result)]
+        last_update = None
     return last_update
 
 
@@ -68,18 +68,19 @@ def main():
     current_timestamp = int(time.time())
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     new_homework = get_homework_statuses(current_timestamp)
-    update = get_last_update()
+    update, new_update = get_last_update()
     while True:
         try:
+            new_update = get_last_update()
             if (int(time.time())-current_timestamp) > 900:
                 new_homework = get_homework_statuses(current_timestamp)
-                current_timestamp = new_homework.get('current_date')
+                current_timestamp = int(time.time())
             if new_homework.get('homeworks'):
                 for item in new_homework.get('homeworks'):
                     send_message(parse_homework_status(item))
                 current_timestamp = new_homework.get('current_date')
-            if update != get_last_update():
-                update = get_last_update()
+            if update != new_update:
+                update = new_update
                 name = update['message']['from']['first_name']
                 chat_id = update['message']['from']['id']
                 msg_text = update['message']['text']
