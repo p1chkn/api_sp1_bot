@@ -73,11 +73,16 @@ def main():
         try:
             new_update = get_last_update()
             if (int(time.time())-current_timestamp) > 900:
+                '''
+                тут я так сделал, чтобы проверка наличия обновления по домашней работе была раз в 15
+                а ответ на сообщения практически в реальном врмени
+                '''
                 new_homework = get_homework_statuses(current_timestamp)
-                current_timestamp = int(time.time())
+                current_timestamp = new_homework.get('current_date')
             if new_homework.get('homeworks'):
                 for item in new_homework.get('homeworks'):
                     send_message(parse_homework_status(item))
+                new_homework = get_homework_statuses(current_timestamp)
                 current_timestamp = new_homework.get('current_date')
             if update != new_update:
                 update = new_update
